@@ -6,7 +6,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
 use Override;
-use PhpParser\Node\Stmt\Label;
 
 class Login extends BaseLogin
 {

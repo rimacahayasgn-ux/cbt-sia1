@@ -9,19 +9,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Answer extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
-    protected $fillable = ['question_id', 'letter', 'text', 'is_active'];
     protected $guarded = [];
+
     protected $casts = [
         'is_active' => 'boolean',
-        'is_correct' => 'boolean',
-    ];
+        'is_correct'=> 'boolean',
+        ];
 
-    //relasi inverse ke model question
+    // relasi inverse ke model question
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Answer $answer) {
+            if (empty($answer->letter)) {
+                $existingCount = Answer::where('question_id', $answer->question_id)->count();
+                $letters = ['A', 'B', 'C', 'D'];
+                $answer->letter = $letters[$existingCount % 4] ?? 'A';
+            }
+        });
+
+        static::saved(function (Answer $answer) {
+            if ($answer->is_correct && $answer->question_id) {
+                Question::where('id', $answer->question_id)->update(['correct_answer' => $answer->letter]);
+            }
+        });
     }
 }

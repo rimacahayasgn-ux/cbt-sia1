@@ -55,6 +55,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+
+            ->navigationGroups([
+    'Operasional Ujian',
+    'Basis Data',
+    'Manajemen',
+    'Sistem',
+]);
     }
 }

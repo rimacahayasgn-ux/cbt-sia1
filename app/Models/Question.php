@@ -12,7 +12,6 @@ class Question extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['subject_id', 'payload', 'correct_answer', 'score', 'description', 'is_active'];
     protected $guarded = [];
     protected $casts = ['is_active' => 'boolean'];
 
@@ -26,5 +25,14 @@ class Question extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Question $question) {
+            if (empty($question->correct_answer)) {
+                $question->correct_answer = 'A';
+            }
+        });
     }
 }

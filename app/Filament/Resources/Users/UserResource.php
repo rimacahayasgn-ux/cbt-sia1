@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class UserResource extends Resource
 {
@@ -26,6 +28,7 @@ class UserResource extends Resource
 
     //ganti teks navigasi
     protected static ?string $navigationLabel = 'Akun Staff';
+    protected static string |UnitEnum| null $navigationGroup = 'Manajemen';
 
     //ganti teks dari model
     protected static ?string $modelLabel = 'staff';
@@ -53,6 +56,11 @@ class UserResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('is_staff', true);
     }
 
     public static function getPages(): array

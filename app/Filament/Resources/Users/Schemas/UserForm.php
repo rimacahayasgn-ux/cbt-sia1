@@ -28,7 +28,7 @@ class UserForm
                             ->avatar() //resize otomatis dan circular
                             ->disk('public')
                             ->directory('user-photos')
-                            ->maxSize('1024') //max 1MB
+                            ->maxSize(1024) //max 1MB
                             ->imageEditor() 
                             ->columnSpanFull()
                             ->alignCenter(),
@@ -38,14 +38,15 @@ class UserForm
                             ->columnSpanFull(),
                         TextInput::make('email')
                             ->label('Alamat Email')
-                            ->unique('users', 'email')
+                            ->unique('users', 'email', ignoreRecord: true)
                             ->prefix('@')
                             ->email(),
                         TextInput::make('username')
                             ->label('Login username')
                             ->unique(
                                 table: 'users',
-                                column: 'username'
+                                column: 'username',
+                                ignoreRecord: true
                             )
                             ->placeholder('Digunakan untuk login akun')
                             ->helperText('Username harus LUUCUKK.')
@@ -55,6 +56,7 @@ class UserForm
                             ->prefixIcon(Heroicon::OutlinedPhone)
                             ->tel(),
                         Toggle::make('is_staff')
+                            ->default(true)
                             ->required(),
                         TextInput::make('password')
                             ->hiddenOn('edit') //disembunyikan di halaman edit

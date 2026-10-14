@@ -29,7 +29,6 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 use UnitEnum;
 
 class SubjectResource extends Resource
@@ -40,7 +39,7 @@ class SubjectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
     protected static string|UnitEnum|null $navigationGroup = 'Basis Data';
-    protected static ?string $modelLabel = 'pelajaran';
+    protected static ?string $modelLabel = 'pelajaran';  
     protected static ?string $navigationLabel = 'Data Pelajaran';
 
     public static function form(Schema $schema): Schema
@@ -51,7 +50,7 @@ class SubjectResource extends Resource
                     ->label('Mata Pelajaran')
                     ->placeholder('Nama Mata Pelajaran')
                     ->columnSpanFull()
-                    ->unique('subjects', 'name')
+                    ->unique('subjects', 'name', ignoreRecord: true)
                     ->required(),
                 Textarea::make('description')
                     ->label('Deskripsi Pertanyaan')
@@ -86,17 +85,14 @@ class SubjectResource extends Resource
                 TextEntry::make('deleted_at')
                     ->label('Dihapus')
                     ->dateTime('d F Y, H:i:s')
-                    ->dateTime()
                     ->visible(fn (Subject $record): bool => $record->trashed()),
                 TextEntry::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d F Y, H:i:s')
-                    ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
                     ->label('Diubah')
                     ->dateTime('d F Y, H:i:s')
-                    ->dateTime()
                     ->placeholder('-'),
             ]);
     }
